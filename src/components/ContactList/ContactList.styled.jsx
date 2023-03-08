@@ -6,6 +6,6 @@ export const List = styled.ul`
   margin-left: auto;
   margin-right: auto;
   width: 400px;
-  padding: 20px 0;
+  padding: 0px 0;
   gap: 10px;
 `;

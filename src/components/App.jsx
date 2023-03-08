@@ -11,7 +11,6 @@ function App() {
       </Section>
 
       <Section>
-        <h2>Contacts</h2>
         <ContactList />
       </Section>
     </div>

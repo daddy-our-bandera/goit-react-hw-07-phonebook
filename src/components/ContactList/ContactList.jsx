@@ -1,31 +1,35 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getFilteredContacts } from 'redux/selectors';
+import { useEffect } from 'react';
+
+import { fetchContacts } from 'redux/operations';
 import { Item } from 'components/ContactListItem/ContactListItem';
-import { List } from './ContactList.styled';
-import { useSelector } from 'react-redux';
-import { getContacts, getFilter } from 'redux/selectors';
 import { Filter } from 'components/Filter/Filter';
-import { Section } from 'components/Section/Section.styled';
+import { List } from './ContactList.styled';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
+  const { error } = useSelector(getContacts);
+  const filteredContacts = useSelector(getFilteredContacts);
 
-  const normalizedFilter = filter.toLowerCase();
-  const filterContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter)
-  );
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
-    <Section>
-      {filterContacts.length > 0 || filter ? (
-        <Filter value={filter} />
+    <div>
+      {error ? (
+        <h2>{error}</h2>
       ) : (
-        <h1>No contacts added</h1>
+        <>
+          <Filter />
+          <List>
+            {filteredContacts.map(({ id, name, phone }) => (
+              <Item key={id} id={id} name={name} number={phone} />
+            ))}
+          </List>
+        </>
       )}
-      <List>
-        {filterContacts.map(({ id, name, number }) => (
-          <Item key={id} id={id} name={name} number={number} />
-        ))}
-      </List>
-    </Section>
+    </div>
   );
 };
